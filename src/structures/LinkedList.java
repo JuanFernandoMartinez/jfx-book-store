@@ -13,46 +13,49 @@ public class LinkedList<K,V> implements List<K,V> {
 	@Override
 	public boolean add(K k, V v) {
 		boolean status = false;
-		if (root == null)
+		if (search(k) == null)
 		{
-			root = new Node<>(k,v);
-			status = true;
-			size++;
-		}else
-		{
-			Node<K, V> current = root;
-			
-			if (current.compareTo(k) ==0)
+			if (root == null)
 			{
-				root = new Node<K,V>(k,v);
-				root.setNext(current);
-				size++;
+				root = new Node<>(k,v);
 				status = true;
+				size++;
 			}else
 			{
-				while (current.getNext()!= null && !status )
+				Node<K, V> current = root;
+				
+				if (current.compareTo(k) ==0)
 				{
-					if (current.getNext().compareTo(k) > 0)
+					root = new Node<K,V>(k,v);
+					root.setNext(current);
+					size++;
+					status = true;
+				}else
+				{
+					while (current.getNext()!= null && !status )
 					{
-						Node<K,V> n = new Node<K,V>(k,v);
-						n.setNext(current.getNext());
-						current.setNext(n);
+						if (current.getNext().compareTo(k) > 0)
+						{
+							Node<K,V> n = new Node<K,V>(k,v);
+							n.setNext(current.getNext());
+							current.setNext(n);
+							size++;
+							status = true;
+						}else
+						{
+							current = current.getNext();
+						}
+					}
+					
+					if (!status)
+					{
+						current.setNext(new Node<K,V>(k, v));
 						size++;
 						status = true;
-					}else
-					{
-						current = current.getNext();
 					}
 				}
 				
-				if (!status)
-				{
-					current.setNext(new Node<K,V>(k, v));
-					size++;
-					status = true;
-				}
 			}
-			
 		}
 		return status;
 	}
