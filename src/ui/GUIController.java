@@ -1,10 +1,15 @@
 package ui;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
+
 
 public class GUIController {
 
@@ -36,20 +41,38 @@ public class GUIController {
     }
     
     
-    public void process()
+    public void process() throws InterruptedException
     {
     	
-    	status.setText("Loading");
-    	long startTime = System.currentTimeMillis();
+    	status.setText("loading");
+    	Thread.sleep(3000);
+    	status.setText("Complete");
+    	try {
+			saveFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
-    	long diference = System.currentTimeMillis()-startTime;
+    }
     
-    	while (diference <= 3000)
+    
+    public void saveFile() throws IOException
+    {
+    	File file;
+    	
+    	FileChooser f = new FileChooser();
+    	f.setTitle("saveFile");
+    	file = f.showSaveDialog(null);
+    	BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+    	bw.write("hola mundo\n");
+    	bw.write("Esta es una prueba\n");
+    	for (int i = 0; i < 10; i++)
     	{
-    		diference = System.currentTimeMillis()-startTime;
-    		
+    		bw.write((i+1)+"\n");
     	}
     	
-    	status.setText("complete");
+    	bw.close();
+    	
     }
 }

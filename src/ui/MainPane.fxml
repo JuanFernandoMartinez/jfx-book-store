@@ -11,25 +11,24 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <AnchorPane accessibleRole="LIST_VIEW" blendMode="SRC_ATOP" prefHeight="186.0" prefWidth="600.0" style="-fx-background-color: #00000;" BorderPane.alignment="CENTER">
+      <AnchorPane accessibleRole="LIST_VIEW" blendMode="SRC_ATOP" prefHeight="186.0" prefWidth="600.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
          <children>
             <TextField fx:id="filePath" layoutX="37.0" layoutY="46.0" />
-            <Button layoutX="186.0" layoutY="46.0" mnemonicParsing="false" onMouseClicked="#selectFile" text="Select File" textFill="#131313" />
-            <MenuButton accessibleRole="BUTTON" layoutX="344.0" layoutY="46.0" mnemonicParsing="false" text="Order Algorithm" textFill="#060606">
+            <Button layoutX="186.0" layoutY="46.0" mnemonicParsing="false" onMouseClicked="#selectFile" style="-fx-background-color: #000000;" text="Select File" textFill="#fafafa" />
+            <MenuButton accessibleRole="BUTTON" layoutX="362.0" layoutY="37.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="163.0" style="-fx-background-color: #000000; -fx-rotate: 15;" text="Order Algorithm" textFill="#fafafa">
               <items>
                 <MenuItem mnemonicParsing="false" text="Merge sort" />
                 <MenuItem mnemonicParsing="false" text="another sort" />
               </items>
             </MenuButton>
-            <Button layoutX="62.0" layoutY="104.0" mnemonicParsing="false" text="Start">
+            <Button layoutX="62.0" layoutY="104.0" mnemonicParsing="false" onMouseClicked="#process" style="-fx-background-color: #000000; -fx-background-radius: 50px;" text="Start" textFill="#fafafa">
                <font>
                   <Font size="19.0" />
                </font>
             </Button>
-            <Label fx:id="status" layoutX="258.0" layoutY="102.0" text="Status">
+            <Label fx:id="status" layoutX="258.0" layoutY="102.0" text="Status" textFill="#f8f5f5">
                <font>
                   <Font size="31.0" />
                </font>
