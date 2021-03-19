@@ -5,8 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Library;
 
 public class Main extends Application {
+	
+	private Library library;
 
 	public static void main(String[] args) {
 		
@@ -15,7 +18,8 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		GUIController controller = new GUIController(true);
+		library = new Library();
+		GUIController controller = new GUIController(library);
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPane.fxml"));
 		

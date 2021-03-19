@@ -1,7 +1,10 @@
 package ui;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -9,9 +12,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import model.Book;
+import model.Library;
+import model.Stand;
 
 
 public class GUIController {
+	
+	private Library library;
 
 	@FXML
     private TextField filePath;
@@ -20,9 +28,12 @@ public class GUIController {
     private Label status;
     
     
-    public GUIController(boolean b) {
-		
+    public GUIController(Library b) {
+		this.library = b;
 	}
+    
+    
+    
     
     public void selectFile()
     {
@@ -41,18 +52,49 @@ public class GUIController {
     }
     
     
-    public void process() throws InterruptedException
+    public void process() throws InterruptedException, NumberFormatException, IOException
     {
     	
-    	status.setText("loading");
-    	Thread.sleep(3000);
-    	status.setText("Complete");
-    	try {
-			saveFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	BufferedReader br = new BufferedReader(new FileReader(filePath.getText()));
+    	int testCases = Integer.parseInt(br.readLine());
+    	for (int i = 0; i < testCases; i++)
+    	{
+    		readData(br);
+    	}
+    	
+    }
+    
+    
+    public void readData(BufferedReader br) throws NumberFormatException, IOException
+    {
+    	library.setCashers(Integer.parseInt(br.readLine()));
+    	int stands = Integer.parseInt(br.readLine());
+    	String currentStand = "";
+    	while (stands > 0)
+    	{
+    		String[] prt = br.readLine().split(" ");
+    		if (prt.length == 2)
+    		{
+    			stands--;
+    			stands+= Integer.parseInt(prt[1]);
+    			library.addStand(prt[0], new Stand(prt[0], Integer.parseInt(prt[1])));
+    			currentStand = prt[0];
+    		}else
+    		{
+    			library.getStands().search(currentStand).add(new Book(prt[0], Integer.parseInt(prt[2]), Double.parseDouble(prt[1])));
+    			stands--;
+    		}
+    	}
+    	
+    	int clients = Integer.parseInt(br.readLine());
+    	for (int i = 0; i < clients; i++)
+    	{
+    		String[] prt = br.readLine().split(" ");
+    		library.addClient(prt[0], prt, i+1);
+    	}
+    	
+    	saveFile();
+    	
     	
     }
     
@@ -75,4 +117,6 @@ public class GUIController {
     	bw.close();
     	
     }
+    
+    
 }
