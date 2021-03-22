@@ -56,44 +56,34 @@ public class GUIController {
     {
     	
     	BufferedReader br = new BufferedReader(new FileReader(filePath.getText()));
-    	int testCases = Integer.parseInt(br.readLine());
-    	for (int i = 0; i < testCases; i++)
-    	{
-    		readData(br);
-    	}
+    	readData(br);
     	
     }
     
     
     public void readData(BufferedReader br) throws NumberFormatException, IOException
     {
-    	library.setCashers(Integer.parseInt(br.readLine()));
+    	library.asingCashers(Integer.parseInt(br.readLine()));
     	int stands = Integer.parseInt(br.readLine());
-    	String currentStand = "";
-    	while (stands > 0)
+    	for (int i = 0; i < stands; i++)
     	{
-    		String[] prt = br.readLine().split(" ");
-    		if (prt.length == 2)
+    		String std[] = br.readLine().split(" ");
+    		library.addStand(std[0], new Stand(std[0], Integer.parseInt(std[1])));
+    		for (int j = 0; j < Integer.parseInt(std[1]); i++)
     		{
-    			stands--;
-    			stands+= Integer.parseInt(prt[1]);
-    			library.addStand(prt[0], new Stand(prt[0], Integer.parseInt(prt[1])));
-    			currentStand = prt[0];
-    		}else
-    		{
-    			library.getStands().search(currentStand).add(new Book(prt[0], Integer.parseInt(prt[2]), Double.parseDouble(prt[1])));
-    			stands--;
+    			String[] prt = br.readLine().split(" ");
+    			library.getStands().search(std[0]).add(new Book(prt[0], Integer.parseInt(prt[2]),Double.parseDouble(prt[1]),std[0]));
+    			if (!library.getDataBase().contains(prt[0])) library.getDataBase().insert(prt[0], std[0]);
     		}
     	}
     	
     	int clients = Integer.parseInt(br.readLine());
+    	
     	for (int i = 0; i < clients; i++)
     	{
     		String[] prt = br.readLine().split(" ");
-    		library.addClient(prt[0], prt, i+1);
+    		library.addClient(prt[0], prt, i);
     	}
-    	
-    	saveFile();
     	
     	
     }
@@ -106,15 +96,7 @@ public class GUIController {
     	FileChooser f = new FileChooser();
     	f.setTitle("saveFile");
     	file = f.showSaveDialog(null);
-    	BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-    	bw.write("hola mundo\n");
-    	bw.write("Esta es una prueba\n");
-    	for (int i = 0; i < 10; i++)
-    	{
-    		bw.write((i+1)+"\n");
-    	}
-    	
-    	bw.close();
+    	library.setPath(file);
     	
     }
     

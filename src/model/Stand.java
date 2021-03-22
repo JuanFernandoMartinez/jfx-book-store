@@ -33,6 +33,27 @@ public class Stand {
 		return status;
 	}
 	
+	public Book search(String sbn)
+	{
+		return bookList.search(sbn);
+	}
+	
+	public void removeOne(String sbn)
+	{
+		Book b = search(sbn);
+		b.setQuantity(b.getQuantity()-1);
+	}
+	
+	public boolean isOff(String isbn)
+	{
+		boolean status = false;
+		if (search(isbn).getPrice() <= 0)
+		{
+			status = true;
+		}
+		
+		return status;
+	}
 	public boolean contains(String isbn)
 	{
 		if (bookList.contains(isbn) && bookList.search(isbn).getQuantity()>0) return true;

@@ -1,15 +1,19 @@
 package model;
 
-public class Book {
+
+
+public class Book implements Comparable<Book> {
 	
 	private String ISBNCode;
 	private double price;
 	private int quantity;
+	private String stand;
 	
-	public Book(String code, int quantity,double price) {
+	public Book(String code, int quantity,double price,String stand) {
 		ISBNCode = code;
 		this.quantity = quantity;
 		this.price = price;
+		this.stand = stand;
 	}
 	
 	public void removeOne()
@@ -40,6 +44,19 @@ public class Book {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+
+	@Override
+	public int compareTo(Book o) {
+		
+		return stand.compareTo(o.stand);
+	}
+	
+	
+	
+
+	
+
+	
 	
 	
 	

@@ -3,7 +3,7 @@ package model;
 import structures.Queue;
 import structures.Stack;
 
-public class Client {
+public class Client implements Comparable<Client>{
 	
 	private String id;
 	private String[] wished;
@@ -60,6 +60,25 @@ public class Client {
 
 	public void setDeck(Stack<Book> deck) {
 		this.deck = deck;
+	}
+
+
+
+
+	@Override
+	public int compareTo(Client o) {
+		int status = 0;
+		if (time > o.time)
+		{
+			status = 1;
+		}else if (time < o.time)
+		{
+			status = -1;
+		}else
+		{
+			status = 0;
+		}
+		return status;
 	}
 	
 	
