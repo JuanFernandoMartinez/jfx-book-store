@@ -1,9 +1,13 @@
 //quick sort method is based on https://geekytheory.com/como-leer-un-fichero-en-javacode
+//merge sort based is based on https://platzi.com/tutoriales/1469-algoritmos/4260-merge-sort-en-java/
 package model;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 
 import structures.HashTable;
@@ -13,7 +17,7 @@ public class Library {
 	
 	private HashTable<String,Stand> stands;
 	private Queue<Client> clients;
-	private Queue<Book>[] cashers;
+	private Casher[] cashers;
 	private HashTable<String, String> dataBase;
 	private File outputPath;
 	
@@ -40,10 +44,10 @@ public class Library {
 	
 	public void asingCashers(int n)
 	{
-		cashers = (Queue<Book>[])new Queue[n];
+		cashers = new Casher[n];
 		for (int i = 0; i  < n; i++)
 		{
-			cashers[i] = new Queue<>();
+			cashers[i] = new Casher();
 		}
 	}
 	
@@ -54,60 +58,70 @@ public class Library {
 	}
 	
 	
-	public Book[] bookMergeSort(Book[] a, int start, int end)
-	{
-		int size = end-start+1;
-		
-		if (size == 1)
-		{
-			Book[] aux = {a[start]};
-			return aux;
-		}else
-		{
-			Book[] left = bookMergeSort(a, start, (int)((start+end)/2));
-			Book[] right = bookMergeSort(a,(int)((start+end)/2)+1,end);
-			int s1 = 0;
-			int s2 = 0;
-			Book[] c = new Book[size];
-			int index = 0;
-			
-			while (s1<left.length && s2 < right.length)
-			{
-				if (left[s1].compareTo(right[s2]) > 0)
-				{
-					c[index] = right[s2];
-					s2++;
-					index++;
-				}else
-				{
-					c[index] = left[s1];
-					s1++;
-					index++;
-				}
-			}
-			
-			if (s1 == left.length)
-			{
-				for (int i = s2; i < right.length; i++)
-				{
-					c[index] = right[i];
-					index++;
-				}
-			}else
-			{
-				for (int i = s1; i < left.length; i++)
-				{
-					c[index] = left[i];
-					index++;
-				}
-			}
-			
-			
-			return c;
-			
-		}
+	public void bookMergeSort(Book[] a){
+	    bookSort(a,0,a.length-1);
 	}
 	
+	public void bookSort(Book arr[], int left, int right){
+	    if(left < right){
+	      
+	      int middle = (left + right) / 2;
+	      
+	      
+	      bookSort(arr, left, middle);
+	      bookSort(arr, middle+1, right);
+
+	      
+	      bookMerge(arr, left, middle, right);
+	    }
+	}
+	
+	public void bookMerge(Book arr[], int left, int middle, int right) {
+		  
+		  int n1 = middle - left + 1;
+		  int n2 = right - middle;
+
+		  
+		  Book leftArray[] = new Book[n1];
+		  Book rightArray[] = new Book[n2];
+
+		  
+		  for (int i=0; i < n1; i++) {
+		    leftArray[i] = arr[left+i];
+		  }
+		  for (int j=0; j < n2; j++) {
+		    rightArray[j] = arr[middle + j + 1];
+		  }
+		  
+		  int i = 0, j = 0;
+
+		  
+		  int k = left;
+
+		 
+		  while (i < n1 && j < n2) {
+		    if (leftArray[i].compareTo(rightArray[j]) <1 ) {
+		      arr[k] = leftArray[i];
+		      i++;
+		    } else {
+		        arr[k] = rightArray[j];
+		        j++;
+		    }
+		    k++;
+		  }
+		  
+		  while (i < n1) {
+		    arr[k] = leftArray[i];
+		    i++;
+		    k++;
+		  }
+		  
+		  while (j < n2) {
+		    arr[k] = rightArray[j];
+		    j++;
+		    k++;
+		  }
+		}
 	
 	
 	
@@ -135,12 +149,12 @@ public class Library {
 	}
 
 
-	public Queue<Book>[] getCashers() {
+	public Casher[] getCashers() {
 		return cashers;
 	}
 
 
-	public void setCashers(Queue<Book>[] cashers) {
+	public void setCashers(Casher[] cashers) {
 		this.cashers = cashers;
 	}
 	
@@ -212,8 +226,12 @@ public class Library {
 	{
 		switch (choice) {
 		case 1:
-			return bookMergeSort(bs,0,bs.length);
-			
+			bookMergeSort(bs);
+			return bs;
+		case 2: 
+			bookQuicksort(bs, 0, bs.length-1);
+			return bs;
+		
 
 		default:
 			return null;
@@ -222,11 +240,11 @@ public class Library {
 	}
 	
 	
-	public static void quicksort( Book[] a, int left, int right) {
+	public static void bookQuicksort( Book[] a, int left, int right) {
 	    if (left < right) {
 	        int pivot = particion(a, left, right);
-	        quicksort(a, left, pivot);
-	        quicksort(a, pivot + 1, right);
+	        bookQuicksort(a, left, pivot);
+	        bookQuicksort(a, pivot + 1, right);
 	    }
 	}
 
@@ -424,15 +442,118 @@ public class Library {
 		return out;
 	}
 	
-	
-	
-	
-	public void writeOutput()
+	public String payment()
 	{
-		BufferedWriter bw = new BufferedWriter(new FileWriter(outputPath));
+		String out = "";
+		Queue<Client> aux = new Queue<>();
+		while (clients.size()>0)
+		{
+			int index = 1;
+			for (Casher x:cashers)
+			{
+				if (x.isEmpty())
+				{
+					x.setClient(clients.top());
+					aux.add(clients.top());
+					clients.pop();
+				}else
+				{
+					x.step();
+				}
+				out += "casher #"+index+" client id: "+x.getClient().getId()+ x.getClient().booksToString(x.getClient().getDeck().size()-x.getBS())+" // "; 
+				out += "===================================================================================\n";
+				out += "                                    Next Step                                      \n";
+				out += "===================================================================================\n";
+			}
+		}
 		
+		while (aux.size()>0)
+		{
+			clients.push(aux.top());
+			aux.pop();
+		}
+		
+		return out;
 	}
 	
+	public String finalOut()
+	{
+		String out = "";
+		out += "======================================\n";
+		out += "           Final output               \n";
+		out += "======================================\n";
+		
+		while (clients.size()>0)
+		{
+			out+= clients.top().getId()+ " "+clients.top().calculateTotalPrice()+"\n";
+			String bs = clients.top().booksToString(0);
+			bs = bs.replace(" , ", " ");
+			out+= bs+"\n";
+			clients.pop();
+		}
+		
+		return out;
+	}
+	
+	
+	
+	public void start()
+	{
+		String out = "";
+		out += section1()+"\n";
+		out += section2()+"\n";
+		out += payment()+"\n";
+		out += finalOut()+"\n";
+		try {
+			writeOutput(out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			
+		}
+		
+	}
+	public void writeOutput(String out) throws IOException
+	{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(outputPath));
+		bw.write(out);
+		bw.close();
+	}
+	
+	
+	public void readInput(String path) throws NumberFormatException, IOException 
+	{
+		BufferedReader br = new BufferedReader(new FileReader(path));
+		asingCashers(Integer.parseInt(br.readLine()));
+    	int standsQuantity = Integer.parseInt(br.readLine());
+    	for (int i = 0; i < standsQuantity; i++)
+    	{
+    		String s = br.readLine();
+    		String std[] = s.split(" ");
+    		addStand(std[0], new Stand(std[0], Integer.parseInt(std[1])));
+    		
+    		for (int j = 0; j < Integer.parseInt(std[1]); j++)
+    		{
+    			String r = br.readLine();
+    			String[] prt = r.split(" ");
+    			
+    			
+    			getStands().search(std[0]).add(new Book(prt[0], Integer.parseInt(prt[2]),Double.parseDouble(prt[1]),std[0]));
+    			if (!getDataBase().contains(prt[0])) getDataBase().insert(prt[0], std[0]);
+    		}
+    	}
+    	
+    	int clients = Integer.parseInt(br.readLine());
+    	
+    	for (int i = 0; i < clients; i++)
+    	{
+    		String[] prt = br.readLine().split(" ");
+    		addClient(prt[0], prt, i);
+    	}
+    	
+    	br.close();
+	}
+	
+
 	
 }
 	

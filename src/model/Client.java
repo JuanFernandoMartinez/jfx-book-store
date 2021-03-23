@@ -81,6 +81,63 @@ public class Client implements Comparable<Client>{
 		return status;
 	}
 	
+	public String booksToString(int index)
+	{
+		String out = "";
+		Stack<Book> aux = new Stack<>();
+		
+		aux.push(deck.top());
+		out+= " , "+deck.top().getISBNCode();
+		deck.pop();
+		
+		while (deck.size()> 0)
+		{
+			aux.push(deck.top());
+			out+= " , "+deck.top().getISBNCode();
+			deck.pop();
+		}
+		
+		while (aux.size()>0)
+		{
+			deck.push(aux.top());
+			aux.pop();
+		}
+		
+		String[] prt = out.split(",");
+		out = "";
+		out+= prt[index];
+		for (int i = index+1; i < prt.length; i++)
+		{
+			out += " , "+prt[i];
+		}
+		
+		return out;
+		
+	}
+	
+	
+	public double calculateTotalPrice()
+	{
+		double total = 0;
+		Stack<Book> aux = new Stack<>();
+		
+		while (deck.size()>0)
+		{
+			aux.add(deck.top());
+			total += deck.top().getPrice();
+			deck.pop();
+		}
+		
+		while (aux.size()>0)
+		{
+			deck.add(aux.top());
+			aux.pop();
+		}
+		
+		return total;
+		
+	}
+	
 	
 	
 	

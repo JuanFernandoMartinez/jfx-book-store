@@ -46,10 +46,13 @@ public class Book implements Comparable<Book> {
 	}
 
 	@Override
-	public int compareTo(Book o) {
-		
-		return stand.compareTo(o.stand);
+	public int compareTo(Book arg0) {
+		int s = stand.compareTo(arg0.stand);
+		return s;
 	}
+
+	
+	
 	
 	
 	
