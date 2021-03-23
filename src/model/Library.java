@@ -1,4 +1,4 @@
-//quick sort method is based on https://geekytheory.com/como-leer-un-fichero-en-javacode
+//quick sort method is based on https://parzibyte.me/blog/2019/12/26/quicksort-java-ordenar-arreglos/
 //merge sort based is based on https://platzi.com/tutoriales/1469-algoritmos/4260-merge-sort-en-java/
 package model;
 
